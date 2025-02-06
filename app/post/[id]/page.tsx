@@ -1,4 +1,3 @@
-
 import { getPostData, getAllPostIds } from "@/lib/posts";
 import Comments from "@/app/components/comments";
 import Image from "next/image";
@@ -8,11 +7,18 @@ export function generateStaticParams() {
   return getAllPostIds().map((post) => ({ params: { id: post.id } }));
 }
 
-export default async function Post({ params }: { params: { id: string } }) {
+
+interface PostPageProps {
+  params: {
+    id: string;
+  };
+}
+
+export default async function Post({ params }: PostPageProps) {
   const postData = await getPostData(params.id);
 
   if (!postData) {
-    return notFound(); 
+    return notFound(); /
   }
 
   return (
