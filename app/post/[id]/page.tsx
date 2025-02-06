@@ -18,7 +18,7 @@ export default async function Post({ params }: PostPageProps) {
   const postData = await getPostData(params.id);
 
   if (!postData) {
-    return notFound(); /
+    return notFound(); 
   }
 
   return (
