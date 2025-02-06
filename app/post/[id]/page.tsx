@@ -3,6 +3,7 @@ import Comments from "@/app/components/comments";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+
 export function generateStaticParams() {
   return getAllPostIds().map((post) => ({ params: { id: post.id } }));
 }
@@ -11,11 +12,29 @@ type PostPageProps = {
   params: {
     id: string;
   };
+  postData: {
+    title: string;
+    date: string;
+    image: string;
+    content: string;
+  };
 };
 
-export default function Post({ params }: PostPageProps) {
-  const postData = getPostData(params.id); // No need for async/await
 
+export async function getStaticProps({ params }: { params: { id: string } }) {
+  const postData = await getPostData(params.id); 
+  if (!postData) {
+    return { notFound: true };
+  }
+
+  return {
+    props: {
+      postData,
+    },
+  };
+}
+
+export default function Post({ params, postData }: PostPageProps) {
   if (!postData) {
     return notFound();
   }
