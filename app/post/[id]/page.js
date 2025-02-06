@@ -3,15 +3,18 @@ import Comments from "@/app/components/comments";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+// Static params generation for dynamic routes
 export function generateStaticParams() {
   return getAllPostIds().map((post) => ({ params: { id: post.id } }));
 }
 
-export default async function Post({ params }: { params: { id: string } }) {
-  const postData = await getPostData(params.id);
+// Fetching data for a single post directly in the component
+export default async function Post({ params }) {
+  const postData = await getPostData(params.id); // Fetch post data
 
   if (!postData) {
-    return notFound();  }
+    return notFound();
+  }
 
   return (
     <div className="min-h-screen bg-gray-800 text-white">
