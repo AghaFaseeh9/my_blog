@@ -1,24 +1,28 @@
+// /app/post/[id]/page.tsx
 import { getPostData, getAllPostIds } from "@/lib/posts";
 import Comments from "@/app/components/comments";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+// This function pre-generates the routes based on post ids (static params generation)
 export function generateStaticParams() {
   return getAllPostIds().map((post) => ({ params: { id: post.id } }));
 }
 
-
+// Correct typing for Post component props
 interface PostPageProps {
   params: {
     id: string;
   };
 }
 
+// Server Component: Fetch the post data directly on the server side
 export default async function Post({ params }: PostPageProps) {
+  // `params.id` should be passed correctly as a string
   const postData = await getPostData(params.id);
 
   if (!postData) {
-    return notFound(); 
+    return notFound(); // If no post data, show the 404 page
   }
 
   return (
