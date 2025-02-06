@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { getPostData, getAllPostIds } from "@/lib/posts";
 import Comments from "@/app/components/comments";
 import Image from "next/image";
@@ -6,19 +6,35 @@ import { notFound } from "next/navigation";
 
 
 export function generateStaticParams() {
-  return getAllPostIds().map((post) => ({ id: post.id }));
+  return getAllPostIds().map((post) => ({ params: { id: post.id } }));
+}
+
+
+export async function getStaticProps({ params }: { params: { id: string } }) {
+  const postData = await getPostData(params.id);
+  if (!postData) {
+    return { notFound: true }; 
+  }
+
+  return {
+    props: {
+      postData,
+    },
+  };
 }
 
 type PostPageProps = {
-  params: {
-    id: string;
+  postData: {
+    title: string;
+    date: string;
+    image: string;
+    content: string;
   };
 };
 
-export default async function Post({ params }: PostPageProps) {
-  const postData = await getPostData(params.id);
+export default function Post({ postData }: PostPageProps) {
   if (!postData) {
-    return notFound();
+    return notFound(); 
   }
 
   return (
