@@ -1,9 +1,7 @@
-
 import { getPostData, getAllPostIds } from "@/lib/posts";
 import Comments from "@/app/components/comments";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-
 
 export function generateStaticParams() {
   return getAllPostIds().map((post) => ({ params: { id: post.id } }));
@@ -13,8 +11,7 @@ export default async function Post({ params }: { params: { id: string } }) {
   const postData = await getPostData(params.id);
 
   if (!postData) {
-    return notFound(); 
-  }
+    return notFound();  }
 
   return (
     <div className="min-h-screen bg-gray-800 text-white">
